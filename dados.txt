@@ -1,0 +1,11 @@
+100 23.99 15 arroz tipo 1 5kg
+121 4.39 23 biscoito recheado
+531 15.49 51 cafe extra forte 500g
+281 18.99 15 cereal matinal 1kg
+400 5.99 34 leite condensado 200g
+446 3.30 33 milho em lata 200g
+308 6.75 35 coco ralada 50g
+570 3.80 25 sal refinado 500g
+802 6.29 10 vinagre de alcool 500ml
+430 3.19 5 sardinha em lata tomate
+59 5.69 62 leite integral uht 1l
