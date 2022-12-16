@@ -7,9 +7,7 @@
 
 #define SUCESSO 0
 #define FILE_NOT_FOUND_ERROR -1
-#define TAM_MAX_DESC (1000 * sizeof(char))
 #define TAM_MAX_COD (5 * sizeof(char))
-
 
 typedef struct Compras {
 	char Codigo[TAM_MAX_COD];
@@ -21,68 +19,33 @@ typedef struct Compras {
 	int NumCompras;
 } tipoCompras;
 
-tipoDados* leArquivoDados(FILE* f);
-tipoDados* realocarDados(tipoDados*);
-
-tipoCompras* leArquivoCompras(FILE* f);
-tipoCompras* realocarCompras(tipoCompras*);
-
-void listaDados(tipoDados* dados);
-void listaCompras(tipoCompras* compras);
-
-tipoDados* adicionaItem(tipoDados* dados);
-tipoCompras* realizaCompra(tipoCompras* compras, tipoDados* dados);
-
-void encerrar(tipoDados* dados, tipoCompras* compras);
-void encerrarDados(tipoDados* dados);
-void encerrarCompras(tipoDados* compras);
+tipoCompras* realocarCompras(tipoCompras* compras, int numCompras) {
 
 
-tipoDados* leArquivoDados(FILE* f) {
-	tipoDados* dados;
-	int i;
 
-	dados = (tipoDados*)malloc(sizeof(tipoDados));
+	tipoCompras* comprasNovo = (tipoCompras*)malloc(sizeof(tipoCompras) * (numCompras + 1));
 
-	for (i = 0; !feof(f); i++)
+
+	for (int i = 0; i < numCompras; i++)
 	{
+		memcpy(comprasNovo[i].Codigo, compras[i].Codigo, TAM_MAX_COD);
+		comprasNovo[i].NumItens = compras[i].NumItens;
 
-		fscanf(f, "%i %f %i ", &dados[i].Codigo, &dados[i].ValorUnitario, &dados[i].Estoque);
 
-		
-		fgets(dados[i].Descricao, TAM_MAX_DESC, f);
-
-		if (!feof(f))
-		{
-			dados = realocarDados(dados, i + 1);
-		}
-		
+		comprasNovo[i].CodigoItens = compras[i].CodigoItens;
+		comprasNovo[i].ValorUnitario = compras[i].ValorUnitario;
+		comprasNovo[i].QntItem = compras[i].QntItem;
 
 	}
-	dados->NumDados = i;
-	
-	return dados;
+	comprasNovo->NumCompras = (numCompras + 1);
+
+	free(compras);
+	return comprasNovo;
 }
 
-tipoDados* realocarDados(tipoDados* dados, int numDados) {
-
-	tipoDados* dadosNovo = (tipoDados*)malloc(sizeof(tipoDados) * (numDados + 1));
-
-
-	for (int i = 0; i < numDados; i++)
-	{
-		dadosNovo[i].Codigo = dados[i].Codigo;
-		memcpy(dadosNovo[i].Descricao, dados[i].Descricao, TAM_MAX_DESC);
-		dadosNovo[i].Estoque = dados[i].Estoque;
-		dadosNovo[i].ValorUnitario = dados[i].ValorUnitario;
-	}
-	dadosNovo->NumDados = (numDados + 1);
-
-	free(dados);
-	return dadosNovo;
+void encerrarCompras(tipoDados* compras) {
 
 }
-
 
 tipoCompras* leArquivoCompras(FILE* f) {
 	tipoCompras* compras;
@@ -123,44 +86,6 @@ tipoCompras* leArquivoCompras(FILE* f) {
 	return compras;
 }
 
-tipoCompras* realocarCompras(tipoCompras* compras, int numCompras) {
-
-
-	
-	tipoCompras* comprasNovo = (tipoCompras*)malloc(sizeof(tipoCompras) * (numCompras + 1));
-
-
-	for (int i = 0; i < numCompras; i++)
-	{
-		memcpy(comprasNovo[i].Codigo, compras[i].Codigo, TAM_MAX_COD);
-		comprasNovo[i].NumItens = compras[i].NumItens;
-		
-		
-		comprasNovo[i].CodigoItens = compras[i].CodigoItens;
-		comprasNovo[i].ValorUnitario = compras[i].ValorUnitario;
-		comprasNovo[i].QntItem = compras[i].QntItem;
-
-	}
-	comprasNovo->NumCompras = (numCompras + 1);
-
-	free(compras);
-	return comprasNovo;
-}
-
-
-void listaDados(tipoDados* dados) {
-
-	for (int i = 0; i < dados->NumDados; i++)
-	{
-		fputs(dados[i].Descricao, stdout);
-		printf("\nCodigo: %i\n", dados[i].Codigo);
-		printf("Valor unitario: %f\n", dados[i].ValorUnitario);
-		printf("Estoque: %i\n\n", dados[i].Estoque);
-	}
-	
-
-
-}
 void listaCompras(tipoCompras* compras) {
 
 	for (int i = 0; i < compras->NumCompras; i++)
@@ -185,44 +110,6 @@ void listaCompras(tipoCompras* compras) {
 	}
 }
 
-tipoDados* adicionaItem(tipoDados* dados) {
-	int codigo, qnt = 0;
-	float valor = 0;
-	char desc[TAM_MAX_DESC];
-
-	printf("Codigo do item: ");
-	scanf("%i", &codigo);
-
-	for (int i = 0; i < dados->NumDados; i++)
-	{
-		if (codigo == dados[i].Codigo)
-		{
-			printf("Digite a quantidade que voce deseja adicionar ao estoque: ");
-			scanf("%i", &qnt);
-			dados[i].Estoque += qnt;
-
-			return dados;
-		}
-	}
-	dados = realocarDados(dados, dados->NumDados);
-	int index = dados->NumDados - 1;
-
-	printf("Digite a descricao do item: ");
-	getchar();
-	fgets(desc, TAM_MAX_DESC, stdin);
-
-	printf("Digite o valor unitario do item: ");
-	scanf("%f", &valor);
-	printf("Digite a quantidade que voce deseja adicionar ao estoque: ");
-	scanf("%i", &qnt);
-
-	dados[index].Codigo = codigo;
-	memcpy(dados[index].Descricao, desc, TAM_MAX_DESC);
-	dados[index].ValorUnitario = valor;
-	dados[index].Estoque = qnt ;
-
-	return dados;
-}
 tipoCompras* realizaCompra(tipoCompras* compras, tipoDados* dados) {
 	
 	compras = realocarCompras(compras, compras->NumCompras);
@@ -308,13 +195,6 @@ tipoCompras* realizaCompra(tipoCompras* compras, tipoDados* dados) {
 void encerrar(tipoDados* dados, tipoCompras* compras) {
 	encerrarCompras(compras);
 	encerrarDados(dados);
-}
-
-void encerrarDados(tipoDados* dados) {
-
-}
-void encerrarCompras(tipoDados* compras) {
-
 }
 
 int main(int argv, char** argc) {
