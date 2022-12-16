@@ -3,6 +3,9 @@
 #define __COMPRAS_h__
 
 // Inclusoes
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "dados.h"
 
 // Constantes
