@@ -3,6 +3,9 @@
 #define __DADOS_h__
 
 // Inclusoes
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // Constantes
 #define TAM_MAX_DESC (1000 * sizeof(char))
