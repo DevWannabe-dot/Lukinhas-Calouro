@@ -47,7 +47,7 @@ tipoCompras* realocarCompras(tipoCompras* compras, int numCompras) {
 	return comprasNovo;
 }
 
-void encerrarCompras(tipoDados* compras) {
+void encerrarCompras(tipoCompras* compras) {
 
 }
 
@@ -194,11 +194,6 @@ tipoCompras* realizaCompra(tipoCompras* compras, tipoDados* dados) {
 
 
 	return compras;
-}
-
-void encerrar(tipoDados* dados, tipoCompras* compras) {
-	encerrarCompras(compras);
-	encerrarDados(dados);
 }
 
 
