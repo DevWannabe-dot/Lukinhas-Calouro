@@ -51,7 +51,7 @@ int main(int argv, char** argc) {
     float valorInserir;
     char descInserir[40];
     
-    setlocale(LC_ALL, "Portuguese");
+    setlocale(LC_CTYPE, "Portuguese");
 
     if (fpDados == NULL || fpCompras == NULL) return FILE_NOT_FOUND_ERROR;
 
